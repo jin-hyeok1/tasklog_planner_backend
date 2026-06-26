@@ -1,0 +1,16 @@
+spring:
+  config:
+    import: optional:classpath:.env
+  application:
+    name: tasklog_planner_backend
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jooq:
+    sql-dialect: postgres
+
+app:
+  auth-token-secret: ${AUTH_TOKEN_SECRET:change-me}
+  auth-token-ttl-seconds: ${AUTH_TOKEN_TTL_SECONDS:86400}
