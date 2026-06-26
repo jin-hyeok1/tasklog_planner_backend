@@ -88,9 +88,9 @@ if (environmentPath.exists()) {
 fun jooqProp(key: String, default: String): String =
     System.getenv(key) ?: envMap[key] ?: default
 
-val jooqJdbcUrl = jooqProp("JOOQ_DATABASE_URL", "jdbc:postgresql://localhost:5432/auth_service")
-val jooqUser = jooqProp("JOOQ_USER", "postgres")
-val jooqPassword = jooqProp("JOOQ_PASSWORD", "postgres")
+val jooqJdbcUrl = jooqProp("DATASOURCE_URL", "jdbc:postgresql://localhost:5432/auth_service")
+val jooqUser = jooqProp("DATASOURCE_USERNAME", "postgres")
+val jooqPassword = jooqProp("DATASOURCE_PASSWORD", "postgres")
 val params = parseQueryParams(jooqJdbcUrl)
 fun parseQueryParams(jdbcUrl: String): Map<String, String> {
     val query = jdbcUrl.substringAfter("?", "")
