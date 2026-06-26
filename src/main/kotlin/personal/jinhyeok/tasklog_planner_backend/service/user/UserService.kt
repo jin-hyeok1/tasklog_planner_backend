@@ -15,6 +15,7 @@ import personal.jinhyeok.tasklog_planner_backend.exception.ApiException
 import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.UpdateUserRequest
 import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.UserDto
 import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.AuthResponse
+import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.ChangePasswordRequest
 import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.LoginRequest
 import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.SignUpRequest
 
@@ -76,6 +77,25 @@ class UserService(
                 notificationEnabled = request.notificationEnabled,
             ),
         ).toDto(timeSupport)
+    }
+
+    fun changePassword(request: ChangePasswordRequest) {
+        val currentPassword = requiredString(request.currentPassword, "currentPassword")
+        val newPassword = requiredString(request.newPassword, "newPassword")
+        val user = appUserRepository.currentUser()
+
+        if (!passwordEncoder.matches(currentPassword, user.get(APP_USER.PASSWORD))) {
+            throw ApiException(ApiCode.UNAUTHORIZED, "Current password is invalid")
+        }
+        if (passwordEncoder.matches(newPassword, user.get(APP_USER.PASSWORD))) {
+            throw ApiException(
+                ApiCode.VALIDATION_FAILED,
+                "New password must be different from current password",
+                mapOf("newPassword" to "must be different from current password"),
+            )
+        }
+
+        appUserRepository.updateCurrentPassword(hashPassword(newPassword))
     }
 
     private fun authResponse(user: personal.jinhyeok.jooq.tables.records.AppUserRecord): AuthResponse {

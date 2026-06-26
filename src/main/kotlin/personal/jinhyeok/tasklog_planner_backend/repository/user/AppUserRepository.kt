@@ -11,7 +11,6 @@ import personal.jinhyeok.jooq.tables.records.AppUserRecord
 import personal.jinhyeok.tasklog_planner_backend.enumeration.ApiCode
 import personal.jinhyeok.tasklog_planner_backend.exception.ApiException
 import personal.jinhyeok.tasklog_planner_backend.security.CurrentUserResolver
-import java.time.OffsetDateTime
 import java.time.OffsetTime
 
 @Repository
@@ -74,6 +73,15 @@ class AppUserRepository(
             .where(APP_USER.EMAIL.eq(email))
             .returning()
             .fetchOne() ?: throw ApiException(ApiCode.NOT_FOUND, "User not found: $email")
+    }
+
+    fun updateCurrentPassword(encodedPassword: String): Int {
+        val current = currentUser()
+        val email = current.get(APP_USER.EMAIL)
+        return dsl.update(APP_USER)
+            .set(APP_USER.PASSWORD, encodedPassword)
+            .where(APP_USER.EMAIL.eq(email))
+            .execute()
     }
 }
 

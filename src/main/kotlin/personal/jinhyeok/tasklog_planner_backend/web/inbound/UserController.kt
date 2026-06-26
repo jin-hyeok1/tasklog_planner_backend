@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.jinhyeok.tasklog_planner_backend.service.user.UserService
+import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.ChangePasswordRequest
 import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.LoginRequest
 import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.UpdateUserRequest
 import personal.jinhyeok.tasklog_planner_backend.web.inbound.dto.SignUpRequest
@@ -29,4 +30,10 @@ class UserController(private val service: UserService) {
     @PutMapping("/me")
     fun updateMe(@RequestBody request: UpdateUserRequest): BaseResponseEntity =
         BaseResponseEntity.single(service.updateMe(request))
+
+    @PutMapping("/me/password")
+    fun changePassword(@RequestBody request: ChangePasswordRequest): BaseResponseEntity {
+        service.changePassword(request)
+        return BaseResponseEntity.empty()
+    }
 }

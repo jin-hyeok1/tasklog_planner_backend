@@ -29,3 +29,8 @@ data class UpdateUserRequest(
     val dailyEndTime: OffsetTime? = null,
     val notificationEnabled: Boolean? = null,
 )
+
+data class ChangePasswordRequest(
+    val currentPassword: String? = null,
+    val newPassword: String? = null,
+)
